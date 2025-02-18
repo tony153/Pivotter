@@ -1,0 +1,106 @@
+import tkinter as tk
+from tkinter import ttk
+
+import pandas as pd
+import split_file
+import UIfun
+
+"""global values"""
+input_df = pd.DataFrame()
+output_df = pd.DataFrame()
+index_list=[]
+valuse_list=[]
+checkBOX_list=[]
+
+inputdf = pd.DataFrame()
+
+app_globals ={
+    "file_path": None,
+    "input_df": input_df,
+    "output_df": output_df,
+    "index_list": index_list,
+    "values_list": valuse_list,
+    "checkBOX_list": checkBOX_list,
+    "CLT":True, #Combining Like Terms
+    "show_all_data":True,
+    "auto_column_width":True,
+}
+
+"""global setting"""
+pd.set_option('display.float_format',lambda x:'%.2f' % x)
+
+
+"""Frame"""
+#Crate Frame ====================
+root = tk.Tk()
+root.title("Pivotter")
+root.geometry("900x600")
+
+# panedWindow ---------
+P_window1 = tk.PanedWindow(root,showhandle=False,sashrelief="groove",handlesize=5,handlepad=0,sashpad=0,sashwidth=4)
+P_window1.pack(fill=tk.BOTH,expand=True)
+
+# Index_setting ---------
+index_setting_Frame=tk.Frame(root,padx=2, name="index_setting_Frame")
+
+#Config Frame ---------
+config_outside_Frame = tk.Frame(root,padx=2, name="config_outside_Frame")
+config_outside_Frame.pack(fill=tk.BOTH,expand=True)
+
+config_Frame = tk.Frame(config_outside_Frame,pady=5,padx=4,name="config_Frame")
+
+piovt_config_Frame = tk.Frame(config_Frame,pady=5,padx=4, name="piovt_config_Frame")
+filter_config_Frame = tk.Frame(config_Frame,pady=5,padx=4, name="filter_config_Frame")
+
+# Title Frame ---------
+Title_Frame1 = tk.Frame(piovt_config_Frame)
+Title_Frame1.pack(fill=tk.BOTH)
+
+Title_Frame2 = tk.Frame(filter_config_Frame)
+Title_Frame2.pack(fill=tk.BOTH)
+#================================
+
+
+
+# Menu ====================
+main_menu = tk.Menu(root, name="main_menu")
+file_menu = tk.Menu(main_menu, tearoff=False)
+
+# file ---------
+file_menu.add_command(label="開敫檔案", command=lambda : UIfun.select_file(root,app_globals))
+file_menu.add_command(label="另存新案", command=lambda : UIfun.save_as(root,app_globals))
+file_menu.add_command(label="分割檔案", command=lambda : split_file.to_split_file(root,app_globals))
+main_menu.add_cascade(label="文件", menu=file_menu)
+
+# option ---------
+option_menu = tk.Menu(main_menu, tearoff=False,name="option_menu")
+option_menu.add_command(label="關閉合併索引同類項", command=lambda : UIfun.change_ClT(root,app_globals))
+option_menu.add_command(label="只顯示少量資料", command=lambda : UIfun.change_show_all_data(root,app_globals))
+option_menu.add_command(label="手動欄寛", command=lambda : UIfun.change_auto_column_width(root,app_globals))
+option_menu.add_command(label="重置所有", command=lambda : UIfun.reset(root,app_globals))
+option_menu.add_cascade(label="選項", menu=option_menu)
+
+root.config(menu=main_menu)
+#==========================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+P_window1.add(index_setting_Frame,minsize=190)
+#P_window1.add(Table_Frame,minsize=510)
+P_window1.add(config_outside_Frame,minsize=21)
+root.mainloop()
+
+
+
